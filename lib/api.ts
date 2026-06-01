@@ -59,7 +59,7 @@ const deleteNote = async (id: string): Promise<Note> => {
   return response.data
 }
 
-const fetchNoteById = async (id: string) => {
+const fetchNoteById = async (id: string): Promise<Note> => {
   const response = await axios.get<Note>(
     `${BASE_URL}/notes/${id}`,
     {
@@ -68,11 +68,6 @@ const fetchNoteById = async (id: string) => {
       },
     }
   );
-
-  if (response.status === 404) {
-    return null;
-  }
-
   return response.data;
 };
 

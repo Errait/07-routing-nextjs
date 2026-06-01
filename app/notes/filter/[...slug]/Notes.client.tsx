@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useDebounce } from 'use-debounce';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
@@ -16,29 +15,21 @@ import { fetchNotes } from '@/lib/api';
 import { NoteTag } from '@/types/note';
 
 interface NotesClientProps {
-  searchWord: string;
-  currentPage: number;
   category?: NoteTag;
 }
 
-export default function NotesClient({
-  searchWord: initialSearch,
-  currentPage: initialPage,
-  category,
-}: NotesClientProps) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const [search, setSearch] = useState(initialSearch);
-  const [page, setPage] = useState(initialPage);
+export default function NotesClient({ category }: NotesClientProps) {
+  const [search, setSearch] = useState<string>('');
+  const [page, setPage] = useState<number>(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [prevCategory, setPrevCategory] = useState(category);
-  if (category !== prevCategory) {
-    setPrevCategory(category);
-    setPage(1);
-  }
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setPage(1);
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [category]);
 
   const [debouncedSearch] = useDebounce(search, 300);
 
@@ -46,29 +37,6 @@ export default function NotesClient({
     setSearch(value);
     setPage(1);
   };
-
-  useEffect(() => {
-    const currentQueryString = searchParams.toString();
-    const params = new URLSearchParams(searchParams.toString());
-
-    if (debouncedSearch) {
-      params.set('search', debouncedSearch);
-    } else {
-      params.delete('search');
-    }
-
-    if (page > 1) {
-      params.set('page', page.toString());
-    } else {
-      params.delete('page');
-    }
-
-    const newQueryString = params.toString();
-
-    if (newQueryString !== currentQueryString) {
-      router.push(`${pathname}?${params.toString()}`, { scroll: false });
-    }
-  }, [debouncedSearch, page, pathname, router, searchParams]);
 
   const { data, isError, isLoading, isSuccess } = useQuery({
     queryKey: ['notes', debouncedSearch, page, category],
