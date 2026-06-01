@@ -8,7 +8,7 @@ import NotesClient from '../../Notes.client';
 import { NoteTag } from '@/types/note';
 
 interface PageProps {
-  params: Promise<{ category: string }>;
+  params: Promise<{ slug: string[] }>;
   searchParams: Promise<{
     search?: string;
     page?: string;
@@ -22,7 +22,7 @@ const NotesByCategory = async ({ params, searchParams }: PageProps) => {
   const searchWord = resolvedSearch.search ?? '';
   const currentPage = Number(resolvedSearch.page) || 1;
 
-  const categoryParam = resolvedParams.category;
+  const categoryParam = resolvedParams.slug[0];
   const category: NoteTag | undefined =
     categoryParam === 'all' ? undefined : (categoryParam as NoteTag);
 
