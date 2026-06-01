@@ -4,7 +4,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
-import NotesClient from '@/app/notes/filter/[...slug]/Notes.client';
+import NotesClient from './Notes.client';
 import { NoteTag } from '@/types/note';
 
 interface PageProps {
@@ -22,9 +22,11 @@ const NotesByCategory = async ({ params, searchParams }: PageProps) => {
   const searchWord = resolvedSearch.search ?? '';
   const currentPage = Number(resolvedSearch.page) || 1;
 
-  const categoryParam = resolvedParams.slug[0];
+  const categoryParam = resolvedParams.slug?.[0];
   const category: NoteTag | undefined =
-    categoryParam === 'all' ? undefined : (categoryParam as NoteTag);
+    categoryParam === 'all' || !categoryParam
+      ? undefined
+      : (categoryParam as NoteTag);
 
   const queryClient = new QueryClient();
 
