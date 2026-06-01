@@ -2,9 +2,9 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
-import { fetchNoteById } from '../../../lib/api';
+import { fetchNoteById } from '@/lib/api';
 import fullPageStyles from './NoteDetails.module.css';
-import modalDeteilsStyles from '../../../components/NotePreview/NotePreview.module.css';
+import modalDeteilsStyles from '@/components/NotePreview/NotePreview.module.css';
 
 export default function NoteDetailsClient({ isModal = false }) {
   const params = useParams();

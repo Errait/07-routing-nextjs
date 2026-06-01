@@ -1,14 +1,5 @@
-import NoteDetails from '../../../notes/[id]/page';
-import Modal from '../../../../components/Modal/Modal';
+import NotePreviewClient from './NotePreview.client';
 
-export default async function NotePreview(props: {
-  params: Promise<{ id: string }>;
-}) {
-  return (
-    <Modal>
-      <div className="container">
-        <NoteDetails params={props.params} isModal={true} />
-      </div>
-    </Modal>
-  );
+export default function NoteModalPage() {
+  return <NotePreviewClient />;
 }

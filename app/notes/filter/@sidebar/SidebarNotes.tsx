@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { VALID_TAGS } from '../../../../types/note';
+import { VALID_TAGS } from '@/types/note';
 import css from './SidebarNotes.module.css';
 
 const SidebarNotes = async () => {
